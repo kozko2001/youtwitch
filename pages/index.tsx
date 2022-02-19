@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import { useEffect, useState } from 'react';
 import { getData, Data } from '../utils/request'
-import VideoItem from './components/VideoItem'
+import VideoItem from '../components/VideoItem'
 import Cookies from 'js-cookie'
 
 const checkToken = (): string | null => {

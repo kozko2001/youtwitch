@@ -1,4 +1,4 @@
-import { VideoWithUser } from '../../utils/request'
+import { VideoWithUser } from './../utils/request'
 
 
 export declare interface VideoItemProps {
