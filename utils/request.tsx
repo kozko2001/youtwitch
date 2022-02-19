@@ -10,7 +10,7 @@ const getUser = async (token: string) => {
     return response.json();
 }
 
-const getFollowers = async (token: string, user_id?: string) => {
+const getFollowers = async (token: string, user_id?: string): Promise<any> => {
     const client_id = process.env.NEXT_PUBLIC_TWITCH_CLIENT_ID;
     if(!user_id) {
         const user = await getUser(token)

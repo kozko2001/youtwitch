@@ -5,18 +5,20 @@ import Cookies from 'js-cookie'
 
 const onClick = async () => {
   const token = checkToken();
-  const followers = await getFollowers(token);
-  console.log(followers);
+  if(token !== null) {
+    const followers = await getFollowers(token);
+    console.log(followers);
+  }
 }
 
-const checkToken = () => {
+const checkToken = (): string | null => {
   const params = new URLSearchParams(window.location.hash.substring(1))
   let access_token = params.get('access_token')
   if (access_token) {
     Cookies.set('token', access_token);
     return access_token;
   }
-  const token = Cookies.get('token')
+  const token = Cookies.get('token') ?? null;
   return token;
 }
 
