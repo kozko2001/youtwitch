@@ -1,13 +1,13 @@
 import type { NextPage } from 'next'
 import { useEffect } from 'react';
-import { getFollowers } from '../utils/request'
+import { getData } from '../utils/request'
 import Cookies from 'js-cookie'
 
 const onClick = async () => {
   const token = checkToken();
   if(token !== null) {
-    const followers = await getFollowers(token);
-    console.log(followers);
+    const data = await getData(token);
+    console.log(data);
   }
 }
 
@@ -26,7 +26,7 @@ const Home: NextPage = () => {
   useEffect(() => {
     const token = checkToken()
     if(!token) {
-      window.location.href = "/login";
+      window.location.href = "/login/index.html";
       return;
     }
 

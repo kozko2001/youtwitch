@@ -1,31 +1,26 @@
-const getUser = async (token: string) => {
-    const client_id = process.env.NEXT_PUBLIC_TWITCH_CLIENT_ID;
-    const response = await fetch('https://api.twitch.tv/helix/users', {
-        headers: {
-            'Client-Id': '' + client_id,
-            'Authorization': `Bearer ${token}`,
-        }
-    });
+import { getUser } from './requests/user'
+import { getFollowers } from './requests/followers'
+import { getVideos } from './requests/videos'
 
-    return response.json();
-}
+const getData = async (token: string) => {
+    const userResponse = await getUser(token);
+    const user = userResponse.data[0];
 
-const getFollowers = async (token: string, user_id?: string): Promise<any> => {
-    const client_id = process.env.NEXT_PUBLIC_TWITCH_CLIENT_ID;
-    if(!user_id) {
-        const user = await getUser(token)
-        return getFollowers(token, user.data[0].id);
+    const followersResponse = await getFollowers(token, user.id);
+    const followersIds = followersResponse.data.map(follower => follower.to_id);
+    const followers = await (await getUser(token, followersIds)).data
+    
+    const videos = (await Promise.all(followersIds.map(user_id => getVideos(token, user_id)))).map(v => v.data).flat();
+
+    return {
+        "user": user,
+        "followers": Object.assign({}, ...followers.map((x) => ({[x.id]: x}))),
+        "videos": videos,
     }
-    const response = await fetch(`https://api.twitch.tv/helix/users/follows?from_id=${user_id}&first=100`, {
-        headers: {
-            'Client-Id': '' + client_id,
-            'Authorization': `Bearer ${token}`,
-        }
-    });
-
-    return response.json();
 }
+
+
 
 export {
-    getFollowers,
+    getData,
 }
