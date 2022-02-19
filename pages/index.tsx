@@ -1,15 +1,8 @@
 import type { NextPage } from 'next'
-import { useEffect } from 'react';
-import { getData } from '../utils/request'
+import { useEffect, useState } from 'react';
+import { getData, Data } from '../utils/request'
+import VideoItem from './components/VideoItem'
 import Cookies from 'js-cookie'
-
-const onClick = async () => {
-  const token = checkToken();
-  if(token !== null) {
-    const data = await getData(token);
-    console.log(data);
-  }
-}
 
 const checkToken = (): string | null => {
   const params = new URLSearchParams(window.location.hash.substring(1))
@@ -23,17 +16,27 @@ const checkToken = (): string | null => {
 }
 
 const Home: NextPage = () => {
+  const [data, setData] = useState<Data | undefined>();
   useEffect(() => {
     const token = checkToken()
     if(!token) {
       window.location.href = "/login/index.html";
       return;
+    } else {
+      getData(token).then((d) => { 
+        setData(d)
+      })
     }
+  }, []);
 
-  });
+  const count = data?.videos.length ?? 0;
+  const items = (data?.videos ?? []).map(item => <VideoItem item={item} key={item.id} />);
   return (
     <div>
-      <a onClick={onClick}> click me !</a>
+      <a> there is ... {`${count}`}</a>
+      <div className="holder mx-auto w-10/12 grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
+        {items}
+      </div>
     </div>
   )
 }

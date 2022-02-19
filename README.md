@@ -4,7 +4,7 @@ An SPA to easily consume content from past streams
 
 ##### Ideal flow
 
-1. Login
+1. Login (done)
 2. See the past streams whom you follow order by date or views
 3. Click on one
 4. See the video
