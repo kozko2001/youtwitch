@@ -12,6 +12,9 @@ export type Data = {
 
 const getData = async (token: string): Promise<Data> => {
     const userResponse = await getUser(token);
+    if(!userResponse.data) {
+        throw new Error('no authorized');
+    }
     const user = userResponse.data[0];
 
     const followersResponse = await getFollowers(token, user.id);

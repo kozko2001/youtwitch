@@ -30,6 +30,8 @@ const Home: NextPage = () => {
     } else {
       getData(token).then((d) => { 
         setData(d)
+      }).catch(e => {
+        window.location.href = "/login/index.html";
       })
     }
 

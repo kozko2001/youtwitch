@@ -16,7 +16,7 @@ const VideoItem = (props: VideoItemProps) => {
             <img className="w-full" src={image_url} alt="" />
             <div className="badge absolute top-0 right-0 bg-red-500 m-1 text-gray-200 p-1 px-2 text-xs font-bold rounded">{props.item.type}</div>
             <div className="info-box text-xs flex p-1 font-semibold text-gray-500 bg-gray-300">
-                <span className="mr-1 p-1 px-2 font-bold">{props.item.view_count} Watching</span>
+                <span className="mr-1 p-1 px-2 font-bold">{props.item.view_count} Views</span>
                 <span className="mr-1 p-1 px-2 font-bold border-l border-gray-400">{props.item.duration}</span>
                 <span className="mr-1 p-1 px-2 font-bold border-l border-gray-400">{created_date}</span>
             </div>
