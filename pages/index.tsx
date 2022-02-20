@@ -37,12 +37,11 @@ const Home: NextPage = () => {
     setCurrentVideo(video);
     window.scrollTo(0, 0);
   }
-  const count = data?.videos.length ?? 0;
+
   const items = (data?.videos ?? []).map(item => <VideoItem item={item} key={item.id} setVideo={setVideo}  />);
 
   return (
     <div>
-      <a> there is ... {`${count}`}</a>
       <div className="holder mx-auto w-10/12 grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
         {currentVideo && <VideoEmbed video_id={currentVideo} />}
         {items}

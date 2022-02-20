@@ -21,12 +21,18 @@ const getData = async (token: string): Promise<Data> => {
     const followersUsers = Object.assign({}, ...followers.map((x) => ({[x.id]: x})))
     
     const videos = (await Promise.all(followersIds.map(user_id => getVideos(token, user_id))))
-            .map(v => v.data).flat()
+            .flat()
             .map(v => ({
                 ...v,
                 user: followersUsers[v.user_id]
-            }));
-
+            }))
+            .sort((a, b) => {
+                const keyA = new Date(a.created_at_date);
+                const keyB = new Date(b.created_at_date);
+                if (keyA < keyB) return 1;
+                if (keyA > keyB) return -1;
+                return 0;
+            })
 
     return {
         "user": user,
