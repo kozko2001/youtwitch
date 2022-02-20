@@ -27,11 +27,10 @@ jobs:
         NEXT_PUBLIC_TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
         NEXT_PUBLIC_TWITCH_REDIRECT_URL: ${{ secrets.TWITCH_REDIRECT_URL }}
         NEXT_PUBLIC_TWITCH_PARENT: youtwitch.allocsoc.net
-        AWS_CLOUDFRONT_DISTRIBUTION_ID: $${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }}
       run: |
         npm install
         npm run publish
     - name: Copy files to the production website with the AWS CLI
       run: |
         aws s3 sync out/ s3://youtwitch.allocsoc.net
-        aws cloudfront create-invalidation --distribution-id ${AWS_CLOUDFRONT_DISTRIBUTION_ID} --paths "/*"
+        aws cloudfront create-invalidation --distribution-id E1U0YMKRZMH96G --paths "/*"
