@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import { useEffect, useState } from 'react';
 import { getData, Data } from '../utils/request'
 import VideoItem from '../components/VideoItem'
+import Header from '../components/Header'
 import Cookies from 'js-cookie'
 import VideoEmbed from '../components/VideoEmbed'
 
@@ -41,8 +42,9 @@ const Home: NextPage = () => {
   const items = (data?.videos ?? []).map(item => <VideoItem item={item} key={item.id} setVideo={setVideo}  />);
 
   return (
-    <div>
-      <div className="holder mx-auto w-10/12 grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
+    <div className='container mx-auto'>
+      <Header />
+      <div className="holder mx-auto grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
         {currentVideo && <VideoEmbed video_id={currentVideo} />}
         {items}
       </div>

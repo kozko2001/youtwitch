@@ -1,6 +1,8 @@
 # YouTwitch
 
-An SPA to easily consume content from past streams
+An SPA to easily consume content from you favorite streamers when they are not live.
+
+You can browser the archived streams and consume them, as it was youtube. Test it at [YouTwitch](https://youtwitch.allocsoc.net/)
 
 ##### Ideal flow
 
