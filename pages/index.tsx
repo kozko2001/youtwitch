@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { getData, Data } from '../utils/request'
 import VideoItem from '../components/VideoItem'
 import Cookies from 'js-cookie'
+import VideoEmbed from '../components/VideoEmbed'
 
 const checkToken = (): string | null => {
   const params = new URLSearchParams(window.location.hash.substring(1))
@@ -15,8 +16,11 @@ const checkToken = (): string | null => {
   return token;
 }
 
+
 const Home: NextPage = () => {
   const [data, setData] = useState<Data | undefined>();
+  const [currentVideo, setCurrentVideo] = useState<string | undefined>();
+
   useEffect(() => {
     const token = checkToken()
     if(!token) {
@@ -27,14 +31,20 @@ const Home: NextPage = () => {
         setData(d)
       })
     }
-  }, []);
 
+  }, []);
+  const setVideo = (video: string) => {
+    setCurrentVideo(video);
+    window.scrollTo(0, 0);
+  }
   const count = data?.videos.length ?? 0;
-  const items = (data?.videos ?? []).map(item => <VideoItem item={item} key={item.id} />);
+  const items = (data?.videos ?? []).map(item => <VideoItem item={item} key={item.id} setVideo={setVideo}  />);
+
   return (
     <div>
       <a> there is ... {`${count}`}</a>
       <div className="holder mx-auto w-10/12 grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
+        {currentVideo && <VideoEmbed video_id={currentVideo} />}
         {items}
       </div>
     </div>
