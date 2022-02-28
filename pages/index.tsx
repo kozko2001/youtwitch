@@ -5,6 +5,7 @@ import VideoItem from '../components/VideoItem'
 import Header from '../components/Header'
 import Cookies from 'js-cookie'
 import VideoEmbed from '../components/VideoEmbed'
+import Recommender from '../components/Recommender'
 
 const checkToken = (): string | null => {
   const params = new URLSearchParams(window.location.hash.substring(1))
@@ -21,6 +22,8 @@ const checkToken = (): string | null => {
 const Home: NextPage = () => {
   const [data, setData] = useState<Data | undefined>();
   const [currentVideo, setCurrentVideo] = useState<string | undefined>();
+  const [currentChannel, setCurrentChannel] = useState<string | undefined>();
+  const [currentToken, setCurrentToken] = useState<string | undefined>();
 
   useEffect(() => {
     const token = checkToken()
@@ -30,24 +33,28 @@ const Home: NextPage = () => {
     } else {
       getData(token).then((d) => { 
         setData(d)
+        setCurrentToken(token)
       }).catch(e => {
         window.location.href = "/login/index.html";
       })
     }
 
   }, []);
-  const setVideo = (video: string) => {
+  
+  const setVideo = async (video: string, channel: string) => {
     setCurrentVideo(video);
     window.scrollTo(0, 0);
+    setCurrentChannel(channel);
   }
 
-  const items = (data?.videos ?? []).map(item => <VideoItem item={item} key={item.id} setVideo={setVideo}  />);
+  const items = (data?.videos ?? []).map(item => <VideoItem recommender={false} item={item} key={item.id} setVideo={setVideo} user_login={item.user_login} user_display_name={item.user_name}  />);
 
   return (
     <div className='container mx-auto'>
       <Header />
       <div className="holder mx-auto grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
         {currentVideo && <VideoEmbed video_id={currentVideo} />}
+        {currentChannel && currentToken && <Recommender token={currentToken} channel={currentChannel} setVideo={setVideo} /> }
         {items}
       </div>
     </div>

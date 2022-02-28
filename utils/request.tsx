@@ -3,10 +3,9 @@ import { getFollowers } from './requests/followers'
 import { getVideos, Video } from './requests/videos'
 
 
-export type VideoWithUser = Video & { user: User }
 export type Data = {
     user: User,
-    videos: Array<VideoWithUser>,
+    videos: Array<Video>,
     followers: Array<User>
 }
 
@@ -44,8 +43,40 @@ const getData = async (token: string): Promise<Data> => {
     }
 }
 
+const getRecommenderData = async (token: string, channel: string): Promise<Array<Video>> => {   
+    const response = await fetch(`${process.env.NEXT_PUBLIC_RECOMMEND_BASE}/api/recommend`, {
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      mode: 'cors', // no-cors, *cors, same-origin
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin', // include, *same-origin, omit
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow', // manual, *follow, error
+      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      body: JSON.stringify({channel}) // body data type must match "Content-Type" header
+    });
+    const video_ids:Array<number> = (await response.json()).result.map((x:any) => x.id )
+    const promises = video_ids.map(vid => getVideos(token, vid.toString(), true))
 
+    const videos = (await Promise.all(promises))
+            .map(x => x[0])
+            .map(v => ({
+                ...v,
+                user: undefined
+            }))
+            .sort((a, b) => {
+                const keyA = new Date(a.created_at_date);
+                const keyB = new Date(b.created_at_date);
+                if (keyA < keyB) return 1;
+                if (keyA > keyB) return -1;
+                return 0;
+            })
+
+    return videos;
+}
 
 export {
     getData,
+    getRecommenderData
 }
