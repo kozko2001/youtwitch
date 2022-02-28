@@ -19,7 +19,7 @@ const Recommendation = (props: RecommendationProps) => {
             .then(setData)
     }, [props.channel, props.channel]);
 
-    const items = (data ?? []).map(item => <VideoItem recommender item={item} key={item.id} setVideo={props.setVideo} user_display_name="" user_login='' />);
+    const items = (data ?? []).map(item => <VideoItem recommender item={item} key={item.id} setVideo={props.setVideo} user_display_name={item.user_name} user_login={item.user_login} />);
 
     return (<> {items} </>)
 }
